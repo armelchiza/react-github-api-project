@@ -66,7 +66,8 @@ class Following extends React.Component {
               containerHeight={200}
               elementHeight={50}
               useWindowAsScrollContainer={true}
-              infiniteLoadBeginEdgeOffset={100}>
+              infiniteLoadBeginEdgeOffset={100}
+              loadingSpinnerDelegate={<div>LOADING</div>}>
               {this.state.following.map(this._followerHandler)}
             </Infinite>
           </ul>

@@ -3,6 +3,7 @@ import GithubUser from './GithubUser';
 import { Link } from 'react-router';
 var Infinite = require('react-infinite');
 
+
 class Followers extends React.Component {
   constructor() {
     super();
@@ -20,7 +21,8 @@ class Followers extends React.Component {
     this.setState({loading:true});
     fetch(url)
     .then(res => res.json()).then(response => {
-      this.setState({followers:this.state.followers.concat(response)})
+      this.setState({followers:this.state.followers.concat(response)
+      ,loading: false ,page: this.state.page + 1})
     }
     )
   }
@@ -29,12 +31,6 @@ class Followers extends React.Component {
     this.fetchData();
   }
 
-  // I AM SO COOL YEAH HELLO MOM COOL COOL :)
-  // I AM SO COOL YEAH HELLO MOM COOL COOL :)
-  // I AM SO COOL YEAH HELLO MOM COOL COOL :)
-  // I AM SO COOL YEAH HELLO MOM COOL COOL :)
-  // I AM SO COOL YEAH HELLO MOM COOL COOL :)
-  // I AM SO COOL YEAH HELLO MOM COOL COOL :)
   _followerHandler = (user_person) => {
     return (
         <li key={user_person.id}>
@@ -59,7 +55,8 @@ class Followers extends React.Component {
               containerHeight={200}
               elementHeight={50}
               useWindowAsScrollContainer={true}
-              infiniteLoadBeginEdgeOffset={100}>
+              infiniteLoadBeginEdgeOffset={100}
+              loadingSpinnerDelegate={<div>LOADING . . .</div>}>
               {this.state.followers.map(this._followerHandler)}
             </Infinite>
           </ul>

@@ -6,16 +6,21 @@ class GithubRepo extends React.Component {
     super();
     //this.setState = this.setState.bind(this);
     this.state = {
+      page:1,
+      loading:false,
+      repositories:[]
     };
   }
 
-  _fetchData () {
+  _fetchData = () => {
     var API_KEY = `0729fb4557783bf62b9a7f4bd93d1069ed1714ba`;
     var url = `https://api.github.com/users/${this.props.params.username}/repos?access_token=${API_KEY}&page=1&per_page=50`;
     //`https://api.github.com/users/${this.props.params.username}/followers?access_token=${API_KEY}&page=1&per_page=50`;
+    this.setState({loading:true});
     fetch(url)
     .then(res => res.json()).then(response => {
-      this.setState({repositories : response})
+      this.setState({repositories : this.state.repositories.concat(response)
+      ,loading: false ,page: this.state.page + 1})
     }
     )
   }
@@ -38,8 +43,15 @@ class GithubRepo extends React.Component {
     return (
       <div className="repos-page">
         <ul>
-          <Infinite containerHeight={200} elementHeight={40} useWindowAsScrollContainer>
-            {this.state.repositories?this.state.repositories.map(this._repositoriesHandler):null}
+          <Infinite
+            isInfiniteLoading={this.state.loading}
+            onInfiniteLoad={this._fetchData}
+            containerHeight={200}
+            elementHeight={50}
+            useWindowAsScrollContainer={true}
+            infiniteLoadBeginEdgeOffset={100}
+            loadingSpinnerDelegate={<div>LOADING</div>}>
+            {this.state.repositories.map(this._repositoriesHandler)}
           </Infinite>
         </ul>
       </div>
