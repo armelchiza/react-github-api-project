@@ -3,7 +3,6 @@ What is this sorcery?? Importing a CSS file in JavaScript?
 Make sure you understand what's going on here!!!
 */
 import './index.css';
-
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Router, Route, IndexRoute, browserHistory } from 'react-router';
@@ -11,6 +10,9 @@ import { Router, Route, IndexRoute, browserHistory } from 'react-router';
 import App from './components/App';
 import Search from './components/Search';
 import User from './components/User';
+import Followers from './components/Followers';
+import Following from './components/Following';
+import GithubRepo from './components/GithubRepo';
 
 /*
 Rendering a router will output the right component tree based on the current URL.
@@ -24,7 +26,11 @@ const routes = (
     <Router history={browserHistory}>
         <Route path="/" component={App}>
             <IndexRoute component={Search}/>
-            <Route path="user/:username" component={User}/>
+            <Route path="user/:username" component={User}>
+              <Route path="followers" component={Followers}/>
+              <Route path="following" component={Following}/>
+              <Route path="repos" component={GithubRepo}/>
+            </Route>
         </Route>
     </Router>
 );

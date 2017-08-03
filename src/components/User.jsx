@@ -19,18 +19,28 @@ class User extends React.Component {
     the data -- in the callback -- we call `setState` to put the user data in our state. This will trigger a re-render.
     When `render` gets called again, `this.state.user` exists and we get the user info display instead of "LOADING..."
     */
+
+    componentDidUpdate(prevProps){
+      this.props.params.username !== prevProps.params.username ? this._fetchData() : null;
+    }
+
+    _fetchData = () =>{
+      var API_KEY = `0729fb4557783bf62b9a7f4bd93d1069ed1714ba`;
+      fetch(`https://api.github.com/users/${this.props.params.username}?access_token=${API_KEY}`)
+      .then(response => response.json())
+      .then(
+          user => {
+              // How can we use `this` inside a callback without binding it??
+              // Make sure you understand this fundamental difference with arrow functions!!!
+              this.setState({
+                  user: user
+              });
+          }
+      );
+    }
+
     componentDidMount() {
-        fetch(`https://api.github.com/users/${this.props.params.username}`)
-        .then(response => response.json())
-        .then(
-            user => {
-                // How can we use `this` inside a callback without binding it??
-                // Make sure you understand this fundamental difference with arrow functions!!!
-                this.setState({
-                    user: user
-                });
-            }
-        );
+        this._fetchData()
     }
 
     /*
@@ -55,7 +65,6 @@ class User extends React.Component {
 
         // If we get to this part of `render`, then the user is loaded
         const user = this.state.user;
-
         // Gather up some number stats about the user, to be used in a map below
         const stats = [
             {
@@ -84,11 +93,11 @@ class User extends React.Component {
                         <h2 className="user-info__title">{user.login} ({user.name})</h2>
                         <p className="user-info__bio">{user.bio}</p>
                     </Link>
-
                     <ul className="user-info__stats">
                         {stats.map(this.renderStat)}
                     </ul>
                 </div>
+                {this.props.children}
             </div>
         );
     }

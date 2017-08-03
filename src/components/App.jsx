@@ -21,6 +21,6 @@ class App extends React.Component {
             </div>
         );
     }
-};
+}; // trying this branching thing 
 
 export default App;
